@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "create-react-app": "^5.0.1",
+    "express": "^4.21.2",
+    "mongoose": "^8.10.0",
+    "node-modules": "^1.0.1",
+    "react-scripts": "^5.0.1"
+  }
+}
