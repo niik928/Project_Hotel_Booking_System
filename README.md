@@ -1,6 +1,5 @@
-# Project-GuestGuru
-# Project_Hotel_Booking_System
 
+# Project_Hotel_Booking_System 
 Project Description :
 GuestGuru is a full-stack hotel booking web application where users can view available rooms, select booking dates, and book rooms. 
 It also supports user authentication (login/register).
