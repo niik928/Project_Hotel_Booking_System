@@ -5,23 +5,25 @@ GuestGuru is a full-stack hotel booking web application where users can view ava
 It also supports user authentication (login/register).
 
 🚀 Tech Stack
-# Frontend
+#Frontend
 React.js
 Bootstrap
 Ant Design (Date Picker)
 Axios
-# Backend
+#Backend
 Node.js
 Express.js
 MongoDB
 Mongoose
 
 📁 Project Structure
+
 client/
  ├─ src/
  │   ├─ components/
  │   ├─ screens/
  │   ├─ App.js
+
 
 server/
  ├─ models/
