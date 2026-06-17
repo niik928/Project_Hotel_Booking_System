@@ -36,3 +36,50 @@
     transform: rotate(360deg);
   }
 }
+
+.navbar {
+  background-color: #1f2937;
+  padding: 15px;
+}
+
+.navbar-brand {
+  color: white !important;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.bs {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 10px;
+  padding: 20px;
+  background: white;
+}
+
+.smallimg {
+  height: 200px;
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.bigimg {
+  height: 400px;
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.btn-dark,
+.btn-danger,
+.btn-primary {
+  border-radius: 20px;
+}
+
+body {
+  background-color: #f4f6f9;
+}

@@ -1,5 +1,5 @@
 const mongoose=require("mongoose");
-var mongoURL="mongodb+srv://W3_87408_Nikita:manager@cluster0.uumbm.mongodb.net/Guest-Guru"
+var mongoURL="mongodb://127.0.0.1:27017/hotel_booking"
 mongoose.connect(mongoURL,{useUnifiedTopology: true})
 var connection=mongoose.connection
 connection.on('error',()=>{
@@ -13,4 +13,4 @@ connection.on('connected',()=>{
 
 
 
-module.exports=mongoose
+module.exports = mongoose

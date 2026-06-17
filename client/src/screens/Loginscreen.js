@@ -12,7 +12,7 @@ function Loginscreen() {
   const [success, setsuccess] = useState(false);
   useEffect(() => {
     if (localStorage.getItem("currentUser")) {
-  
+
     }
   }, []);
 
@@ -23,22 +23,23 @@ function Loginscreen() {
     };
     try {
       setloading(true);
-      const result = await (await axios.post("/api/users/login", user)).data;
+      const response = await axios.post(
+        'http://localhost:5000/api/users/login',
+        user
+      );
+
+      const result = response.data;
       localStorage.setItem("currentUser", JSON.stringify(result));
-        window.location.href = '/home';
+      window.location.href = '/home';
       console.log(result);
       setemail("");
       setpassword("");
-
-      
-        setsuccess(true);
-        
-      
-  
+      setsuccess(true);
     } catch (error) {
-      seterror(true);
-      setloading(false);
-    }
+  console.log(error);
+  seterror(true);
+  setloading(false);
+}
   }
 
   return (

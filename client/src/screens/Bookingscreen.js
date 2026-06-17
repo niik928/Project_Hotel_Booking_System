@@ -1,77 +1,148 @@
-import React,{ useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import Loader from "../components/Loader";
-import Error from "../components/Error";
-
-import { useParams } from "react-router-dom";
+import moment from "moment";
 
 function Bookingscreen() {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { roomid, fromdate, todate } = useParams();
+
   const [room, setRoom] = useState(null);
-  const { roomid } = useParams();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchRoomDetails = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`/api/rooms/getroombyid/${roomid}`); 
-        setRoom(response.data);
-      } catch (err) {
-        setError(err.response?.data?.error || "Error fetching room details");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRoomDetails();
+    axios
+      .get(`http://localhost:5000/api/rooms/getroombyid/${roomid}`)
+      .then((res) => {
+        setRoom(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [roomid]);
 
-  return (
-    <div>
-      
-      {loading ? (
-        <Loader/>
-      ) : room ? (
-        <div className='m-5'>
-          <div className="row justify-content-center mt-5 bs">
-            <div className="col md-5">
-            
-            <h1>{room.name}</h1>
-            <img src={`/images/${room.imageurls[0]}`} className="bigimg" />
-            </div>
-            <div className="col md-5">
-            <div style={{textAlign:'right'}}>
-            <h1>Booking Details</h1>
-            <hr/>
-            <b>
-            <p>Name: {} </p>
-            <p>From Date: </p>
-            <p>To Date: </p>
-            <p>Max Count : {room.maxCount}</p>
-            </b>
-            </div>
-            <div style={{textAlign:'right'}}>
-            <h1>Amount</h1>
-            <b>
-            <p>Total Days: </p>
-            <p>Rent per day: {room.rentperday}</p>
-            <p>Total Amount: </p>
-            </b>
-            </div>
-            <div style={{ float: 'right' }}>
-            <button className='btn btn-primary'>Pay Now</button>
-            </div>
-            
-            </div>
-            </div>
-            
-      
-      </div>
-  
-      ) : (<Error/>)}
-      </div>
+ const totaldays =
+  moment(todate, "DD-MM-YYYY").diff(
+    moment(fromdate, "DD-MM-YYYY"),
+    "days"
+  ) + 1;
+
+  const totalamount = totaldays * (room?.rentperday || 0);
+
+  async function payNow() {
+    const currentUser = JSON.parse(
+      localStorage.getItem("currentUser")
+    );
+
+    const bookingDetails = {
+      room: room.name,
+      roomid: room._id,
+      userid: currentUser?._id,
+      fromdate,
+      todate,
+      totalamount,
+      totaldays,
+    };
+
+    try {
+      await axios.post(
+        "http://localhost:5000/api/bookings/bookroom",
+        bookingDetails
       );
-    }
+
+      alert("Payment Successful!");
+      navigate("/");
+    } catch (error) {
+  console.log("FULL ERROR:", error);
+  console.log("RESPONSE:", error.response);
+  console.log("DATA:", error.response?.data);
+
+  alert("Payment Failed");
+}
+  }
+
+  return room ? (
+    <div className="container mt-5">
+      <div className="row justify-content-center bs p-4">
+
+        <div className="col-md-6">
+          <h2>{room.name}</h2>
+
+          <img
+            src={`/images/${room.imageurls?.[0]}`}
+            className="img-fluid rounded"
+            alt={room.name}
+          />
+
+          <div className="mt-3">
+            <p>
+              <b>Description:</b> {room.description}
+            </p>
+
+            <p>
+              <b>Type:</b> {room.type}
+            </p>
+
+            <p>
+              <b>Phone:</b> {room.phoneNumber}
+            </p>
+
+            <p>
+              <b>Max Count:</b> {room.maxCount}
+            </p>
+          </div>
+        </div>
+
+        <div className="col-md-6">
+
+          <h3>Booking Details</h3>
+          <hr />
+
+          <p>
+            <b>Room Name:</b> {room.name}
+          </p>
+
+          <p>
+            <b>From Date:</b> {fromdate}
+          </p>
+
+          <p>
+            <b>To Date:</b> {todate}
+          </p>
+
+          <p>
+            <b>Max Count:</b> {room.maxCount}
+          </p>
+
+          <hr />
+
+          <h3>Amount</h3>
+
+          <p>
+            <b>Total Days:</b> {totaldays}
+          </p>
+
+          <p>
+            <b>Rent Per Day:</b> ₹{room.rentperday}
+          </p>
+
+          <p>
+            <b>Total Amount:</b> ₹{totalamount}
+          </p>
+
+          <button
+            className="btn btn-primary mt-3"
+            onClick={payNow}
+          >
+            Pay Now
+          </button>
+
+        </div>
+      </div>
+    </div>
+  ) : (
+    <h2 className="text-center mt-5">Loading...</h2>
+  );
+}
 
 export default Bookingscreen;

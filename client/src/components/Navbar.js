@@ -1,77 +1,56 @@
 import React from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
-
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
-  let user;
+  let user = null;
 
   try {
-    const storedUser = localStorage.getItem("currentUser");
-    user = storedUser ? JSON.parse(storedUser) : null;
+    user = JSON.parse(localStorage.getItem("currentUser"));
   } catch (e) {
-    console.error('Error parsing user data from localStorage', e);
     user = null;
   }
-  function logout() {
-    localStorage.removeItem('currentUser');
-    window.location.href = '/login';
-  }
+const navigate = useNavigate();
+function logout() {
+  localStorage.removeItem("currentUser");
+  navigate("/login");
+}
+
   return (
-    <div>
-      <nav class="navbar navbar-expand-lg">
-        <a class="navbar-brand" href="#">
-          GUEST-GURU
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon" ><FontAwesomeIcon icon={faBars} /></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav mr-5">
-          {user ? (
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <FontAwesomeIcon icon={faUser} /> {user.name}
-                </a>
-                <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                  <a className="dropdown-item" href="#">Bookings</a>
-                  <a className="dropdown-item" href="#" onClick={logout}>Logout</a>
-                </div>
-              </li>
-            ) : (
-              <>
-                <li class="nav-item active">
-                  <a class="nav-link" href="/register">
-                    Register
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/login">
-                    Login
-                  </a>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
-      </nav>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div className="container">
+    <a className="navbar-brand" href="/">
+      GUEST GURU
+    </a>
+
+    <div className="ms-auto">
+      {user ? (
+        <>
+          <span className="text-white me-3">
+            Hi, {user.name}
+          </span>
+
+          <button
+            className="btn btn-danger"
+            onClick={logout}
+          >
+            Logout
+          </button>
+        </>
+      ) : (
+        <>
+          <a href="/login" className="btn btn-primary me-2">
+            Login
+          </a>
+
+          <a href="/register" className="btn btn-success">
+            Register
+          </a>
+        </>
+      )}
     </div>
+  </div>
+</nav>
   );
 }
+
 export default Navbar;

@@ -3,17 +3,37 @@ const router=express.Router();
 const User =require("../models/user")
 
 
-router.post("/register",async(req,res)=>{
-    const {name , email ,phone, password} = req.body
-    const newUser=new User(req.body)
-    try{
-        newUser.save()
-        res.send("User Registered successfully")
-        console.log(newUser);
-    } catch(error){
-        return res.status(400).json({error});
-    }
+// router.post("/register",async(req,res)=>{
+//      console.log("Register API Hit");
+//   console.log(req.body);
+//     const {name , email ,phone, password} = req.body
+//     const newUser=new User(req.body)
+//     try{
+//         newUser.save()
+//         res.send("User Registered successfully")
+//         console.log(newUser);
+//     } catch(error){
+//         return res.status(400).json({error});
+//     }
+// });
+router.post("/register", async (req, res) => {
+  try {
+    console.log("Register API Hit");
+    console.log(req.body);
+
+    const newUser = new User(req.body);
+
+    const savedUser = await newUser.save();
+
+    console.log(savedUser);
+
+    res.send("User Registered Successfully");
+  } catch (error) {
+    console.log("REGISTER ERROR => ", error);
+    res.status(400).json({ error: error.message });
+  }
 });
+
 router.post("/login",async (req,res)=>{
     const{email,password}=req.body
     try{

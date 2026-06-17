@@ -18,7 +18,7 @@ function RegisterScreen () {
     const [cpassword, setcpassword] = useState('')
 
     async function register(){
-        if(password!=cpassword){
+        if(password !== cpassword){
           alert('Passwords do not match');
             return;
             }
@@ -32,7 +32,12 @@ function RegisterScreen () {
     
     try {
       setloading(true)
-      const {result} = await axios.post('/api/users/register',user)
+    const result = await axios.post(
+  "http://localhost:5000/api/users/register",
+  user
+);
+
+console.log(result.data);
       setloading(false)
       setsuccess(true)
       
